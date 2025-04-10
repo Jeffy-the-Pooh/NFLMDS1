@@ -1,0 +1,57 @@
+```javascript
+class DraftSimulator {
+    constructor() {
+        this.teams = [
+            'Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills', 'Carolina Panthers',
+            'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns', 'Dallas Cowboys', 'Denver Broncos',
+            'Detroit Lions', 'Green Bay Packers', 'Houston Texans', 'Indianapolis Colts', 'Jacksonville Jaguars',
+            'Kansas City Chiefs', 'Las Vegas Raiders', 'Los Angeles Chargers', 'Los Angeles Rams', 'Miami Dolphins',
+            'Minnesota Vikings', 'New England Patriots', 'New Orleans Saints', 'New York Giants', 'New York Jets',
+            'Philadelphia Eagles', 'Pittsburgh Steelers', 'San Francisco 49ers', 'Seattle Seahawks', 'Tampa Bay Buccaneers',
+            'Tennessee Titans', 'Washington Commanders'
+        ];
+        this.rounds = 7;
+        this.picksPerRound = 32;
+        this.totalPicks = 257;
+        this.draftBoard = [];
+        this.generateDraftOrder();
+    }
+
+    generateDraftOrder() {
+        let pickNumber = 1;
+        for (let round = 1; round <= this.rounds; round++) {
+            for (let i = 0; i < this.picksPerRound && pickNumber <= this.totalPicks; i++) {
+                this.draftBoard.push({ round, pickNumber, team: this.teams[i % this.teams.length], player: null });
+                pickNumber++;
+            }
+        }
+    }
+
+    simulateDraft() {
+        const players = this.generatePlayers();
+        for (let pick of this.draftBoard) {
+            const player = players.pop();
+            pick.player = player;
+            console.log(`Round ${pick.round}, Pick ${pick.pickNumber}: ${pick.team} selects ${player.name} - ${player.position}`);
+        }
+    }
+
+    generatePlayers() {
+        const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S'];
+        const players = [];
+        for (let i = 1; i <= this.totalPicks; i++) {
+            const player = {
+                name: `Player ${i}`,
+                position: positions[Math.floor(Math.random() * positions.length)]
+            };
+            players.push(player);
+        }
+        return players.sort(() => 0.5 - Math.random()); // Shuffle players
+    }
+}
+
+// Run the simulator
+const draftSimulator = new DraftSimulator();
+draftSimulator.simulateDraft();
+```
+
